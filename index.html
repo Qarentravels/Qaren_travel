@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="light-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة قارن | وجهتك الأولى لمقارنة أسعار السفر</title>
     <style>
         :root {
-            --primary-green: #039855; /* اللون الأخضر الزاهي المميز من لقطة الشاشة */
+            --primary-green: #039855; 
             --primary-hover: #027a44;
             --bg-light: #f9fafb;
             --text-main: #1f2937;
             --text-muted: #6b7280;
             --border-color: #d1d5db;
+            --card-bg: #ffffff;
+            --chip-bg: #f3f4f6;
+            --glow-color: rgba(37, 99, 235, 0.4);
+            --price-color: #b45309;
+        }
+
+        .dark-mode {
+            --bg-light: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --chip-bg: #334155;
+            --primary-green: #10b981;
+            --primary-hover: #059669;
+            --price-color: #fbbf24;
         }
 
         body {
@@ -20,16 +36,35 @@
             margin: 0;
             padding: 0;
             color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
         }
 
-        /* تصميم الهيدر الأخضر العريض تماماً مثل الصورة */
+        .intro-airplane {
+            position: fixed;
+            top: 25%;
+            left: -150px;
+            font-size: 40px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: flyAcross 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes flyAcross {
+            0% { left: -100px; transform: translateY(0) rotate(15deg); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { left: 110%; transform: translateY(-80px) rotate(25deg); opacity: 0; }
+        }
+
         header {
             background-color: var(--primary-green);
             color: white;
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: right;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             position: relative;
+            transition: background-color 0.3s;
         }
 
         .header-container {
@@ -40,39 +75,87 @@
             align-items: center;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 700;
+        /* تصميم شعار قارن المخصص المحتوي على حرف R بداخل دائرة أنيقة */
+        .brand-block {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+
+        .qaren-logo {
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            color: #039855;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            font-family: 'Arial Black', sans-serif;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,255,255,0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .dark-mode .qaren-logo {
+            color: #10b981;
+        }
+
+        .brand-block:hover .qaren-logo {
+            transform: rotate(360deg);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
         }
 
         header p {
-            margin: 5px 0 0 0;
-            font-size: 15px;
+            margin: 4px 0 0 0;
+            font-size: 14px;
             opacity: 0.9;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
         }
 
         .container {
             max-width: 650px;
-            margin: -20px auto 40px auto; /* تداخل خفيف يعطي مظهر عصري */
+            margin: -20px auto 40px auto;
             padding: 0 20px;
             position: relative;
             z-index: 10;
         }
 
-        /* صندوق البحث الرئيسي الأبيض */
         .search-card {
-            background: white;
+            background: var(--card-bg);
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            border: 1px solid #edf2f7;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* تصميم وجهات شائعة (الرقاقات / Chips) */
         .popular-section {
             margin-bottom: 25px;
         }
@@ -93,27 +176,27 @@
         .chip {
             display: inline-block;
             padding: 8px 16px;
-            background-color: #f3f4f6;
+            background-color: var(--chip-bg);
             border: 1px solid var(--border-color);
             border-radius: 50px;
             font-size: 14px;
             cursor: pointer;
             margin-left: 8px;
             margin-bottom: 8px;
+            color: var(--text-main);
             transition: all 0.2s ease;
         }
 
         .chip:hover {
-            background-color: #e5e7eb;
-            border-color: #9ca3af;
+            box-shadow: 0 0 8px var(--glow-color);
+            border-color: #2563eb;
         }
 
-        /* أزرار التبويب (ذهاب وعودة / ذهاب فقط) */
         .trip-tabs {
             display: table;
             width: 100%;
             margin-bottom: 25px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .tab-item {
@@ -133,11 +216,6 @@
             border-bottom: 3px solid var(--primary-green);
         }
 
-        /* المجموعات والحقول */
-        .form-grid {
-            display: block;
-        }
-
         .form-group {
             margin-bottom: 20px;
             text-align: right;
@@ -148,7 +226,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 14px;
-            color: #374151;
+            color: var(--text-main);
         }
 
         select, input[type="text"], input[type="date"] {
@@ -157,23 +235,22 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 15px;
-            background-color: #fff;
+            background-color: var(--card-bg);
             box-sizing: border-box;
             color: var(--text-main);
-            transition: all 0.2s ease;
+            transition: all 0.2s ease, box-shadow 0.1s;
         }
 
         select:focus, input:focus {
             outline: none;
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 3px rgba(3, 152, 85, 0.1);
+            border-color: #2563eb !important;
+            box-shadow: 0 0 12px #2563eb !important;
         }
 
-        /* قسم الركاب العداد بمظهر الموبايل الأنيق */
         .passenger-container {
             display: table;
             width: 100%;
-            background: #f9fafb;
+            background: var(--chip-bg);
             padding: 8px 16px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
@@ -197,7 +274,8 @@
             height: 32px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            background: white;
+            background: var(--card-bg);
+            color: var(--text-main);
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
@@ -205,10 +283,7 @@
             text-align: center;
             line-height: 30px;
             user-select: none;
-        }
-
-        .btn-counter:box {
-            background: #f3f4f6;
+            transition: background 0.2s;
         }
 
         .counter-value {
@@ -218,8 +293,7 @@
             font-weight: bold;
             font-size: 16px;
         }
-
-        /* زر البحث الرئيسي العريض */
+        
         .btn-search {
             width: 100%;
             padding: 15px;
@@ -232,14 +306,14 @@
             cursor: pointer;
             margin-top: 10px;
             box-shadow: 0 4px 12px rgba(3, 152, 85, 0.2);
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .btn-search:hover {
-            background-color: var(--primary-hover);
+        .btn-search:active {
+            box-shadow: 0 0 15px #2563eb;
+            transform: scale(0.99);
         }
 
-        /* قسم عروض النتائج والبطاقات الديناميكية */
         .results-section {
             margin-top: 30px;
             display: none;
@@ -256,15 +330,16 @@
         }
 
         .result-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .provider-info strong {
@@ -280,6 +355,18 @@
             display: block;
         }
 
+        /* ستايل عرض السعر الحسابي المكتشف حديثاً بناءً على طلبك */
+        .price-badge {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--price-color);
+            background: rgba(3, 152, 85, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
         .btn-go-book {
             padding: 10px 22px;
             color: white;
@@ -288,10 +375,6 @@
             font-weight: bold;
             font-size: 14px;
             transition: opacity 0.2s;
-        }
-
-        .btn-go-book:hover {
-            opacity: 0.9;
         }
 
         .adeal-btn { background-color: #512da8; }
@@ -306,21 +389,27 @@
 </head>
 <body>
 
-    <!-- هيدر منصة قارن المماثل لـ Replit -->
+    <div class="intro-airplane">✈️</div>
+
     <header>
         <div class="header-container">
-            <div>
-                <h1>منصة قارن 🛠️</h1>
-                <p>وجهتك الأولى لمقارنة أسعار السفر في المملكة ومصر</p>
+            <div class="brand-block">
+                <!-- لوجو قارن المطور: دائرة بيضاء بداخلها حرف R أنيق وتتحرك عند التمرير -->
+                <div class="qaren-logo">R</div>
+                <div>
+                    <h1>منصة قارن 🛠️</h1>
+                    <p>وجهتك الأولى لمقارنة أسعار السفر في المملكة ومصر</p>
+                </div>
             </div>
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <span id="themeIcon">🌙</span> <span id="themeText">الوضع الداكن</span>
+            </button>
         </div>
     </header>
 
     <div class="container">
-        <!-- كارت البحث الشامل والمنظم بنفس حقول الصورة -->
         <div class="search-card">
             
-            <!-- الوجهات الشائعة السريعة مثل واجهة Replit -->
             <div class="popular-section">
                 <div class="popular-title">وجهات شائعة</div>
                 <div class="chips-container">
@@ -331,13 +420,11 @@
                 </div>
             </div>
 
-            <!-- تبويبات نوع الرحلة -->
             <div class="trip-tabs">
                 <div class="tab-item active" id="tabRoundTrip" onclick="setTripType('round')">ذهاب وعودة</div>
                 <div class="tab-item" id="tabOneWay" onclick="setTripType('one-way')">ذهاب فقط</div>
             </div>
 
-            <!-- مدخلات البحث ومطارات السعودية ومصر -->
             <div class="form-grid">
                 <div class="form-group">
                     <label>من أين تسافر؟ (مدينة المغادرة)</label>
@@ -392,7 +479,6 @@
                     <input type="date" id="returnDate">
                 </div>
 
-                <!-- حقل الفندق المفضل الإضافي كما في شاشة ريبليت -->
                 <div class="form-group">
                     <label>الفندق المفضل (اختياري)</label>
                     <select id="hotelSelect">
@@ -413,7 +499,6 @@
                     </select>
                 </div>
 
-                <!-- عداد المسافرين المماثل للموجود بالصورة تماماً -->
                 <div class="form-group">
                     <label>عدد المسافرين</label>
                     <div class="passenger-container">
@@ -430,15 +515,15 @@
             </div>
         </div>
 
-        <!-- قسم عرض نتائج البحث الحية والديناميكية التمريرية Deep Links -->
         <div id="qarenResultsBlock" class="results-section">
-            <div class="results-title" id="resultsMainTitle">الرحلات المتوفرة والعروض المباشرة:</div>
+            <div class="results-title" id="resultsMainTitle">الرحلات المتوفرة والعروض المباشرة الحالية:</div>
             
-            <!-- عروض الطيران -->
             <div class="result-card" id="adealCard">
                 <div class="provider-info">
                     <strong>طيران أديل (Flyadeal)</strong>
                     <span id="adealDetails">رحلة مباشرة ببياناتك الجاهزة بالكامل</span>
+                    <!-- حقل عرض السعر التلقائي المحسوب -->
+                    <div class="price-badge" id="adealPrice">السعر: جاري الحساب...</div>
                 </div>
                 <a id="adealLinkUrl" href="#" target="_blank" class="btn-go-book adeal-btn">احجز الآن</a>
             </div>
@@ -447,11 +532,11 @@
                 <div class="provider-info">
                     <strong>طيران ناس (Flynas)</strong>
                     <span id="nasDetails">أفضل عروض الطيران الاقتصادي ممررة لصفحة الدفع</span>
+                    <div class="price-badge" id="nasPrice">السعر: جاري الحساب...</div>
                 </div>
                 <a id="nasLinkUrl" href="#" target="_blank" class="btn-go-book nas-btn">احجز الآن</a>
             </div>
 
-            <!-- عرض كارت الفندق الديناميكي إن وُجد اختيار -->
             <div class="result-card" id="hotelCardResult" style="display: none;">
                 <div class="provider-info">
                     <strong id="chosenHotelTitle">اسم الفندق المحدد</strong>
@@ -460,14 +545,35 @@
                 <a id="hotelLinkUrl" href="#" target="_blank" class="btn-go-book hotel-btn">احجز الفندق الآن</a>
             </div>
         </div>
-
     </div>
 
     <script>
         let currentTripType = 'round';
         let passengerAmount = 1;
 
-        // إعداد التاريخ التلقائي لعام 2026 عند التشغيل الفوري للموقع
+        // محرك ذكي لحساب أسعار تقريبية وديناميكية مخصصة للمطارات المحددة في مصر والسعودية
+        function calculateMockPrice(from, to, provider) {
+            // أسعار أساسية تقريبية للرحلات بالريال السعودي أو ما يعادله
+            let basePrice = 450; 
+            
+            // تعديل السعر بناءً على المسافة بين المطارات المحددة
+            if ((from === 'CAI' || from === 'HBE') && (to === 'RUH' || to === 'JED')) {
+                basePrice = 750; // رحلة دولية مصر - السعودية
+            } else if ((from === 'RUH' || from === 'JED') && (to === 'MED' || to === 'AHB')) {
+                basePrice = 280; // رحلة داخلية سعودية
+            }
+            
+            // طيران أديل عادة أرخص قليلاً في بعض المسارات الافتراضية
+            if (provider === 'adeal') {
+                basePrice = Math.round(basePrice * 0.95);
+            } else {
+                basePrice = Math.round(basePrice * 1.02);
+            }
+
+            // ضرب السعر في عدد الركاب المحدد من العداد
+            return basePrice * passengerAmount;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -479,14 +585,36 @@
 
             const systemToday = `${yyyy}-${mm}-${dd}`;
             
-            // تعيين التاريخ تلقائياً لمنع التواريخ الفائتة
             document.getElementById('departureDate').value = systemToday;
             document.getElementById('departureDate').min = systemToday;
             document.getElementById('returnDate').value = systemToday;
             document.getElementById('returnDate').min = systemToday;
+
+            document.body.addEventListener('click', function(e) {
+                if(e.target.classList.contains('chip') || e.target.classList.contains('btn-search') || e.target.classList.contains('btn-counter')) {
+                    e.target.style.outline = "none";
+                    e.target.style.boxShadow = "0 0 15px #2563eb";
+                    setTimeout(() => { e.target.style.boxShadow = ""; }, 300);
+                }
+            });
         });
 
-        // تغيير نوع الرحلة (ذهاب وعودة / ذهاب فقط)
+        function toggleDarkMode() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "الوضع الداكن";
+            } else {
+                body.classList.add('dark-mode');
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "الوضع المضيء";
+            }
+        }
+
         function setTripType(type) {
             currentTripType = type;
             const tabRound = document.getElementById('tabRoundTrip');
@@ -504,31 +632,28 @@
             }
         }
 
-        // اختيار سريع للوجهات من الـ Chips المتواجدة بأعلى الفارم
         function quickSelectDestination(code) {
             const toSelect = document.getElementById('toCity');
             if(code === 'Makkah') {
-                // مكة المكرمة تستخدم مطار جدة كأقرب محطة سفر
                 toSelect.value = 'JED';
             } else {
                 toSelect.value = code;
             }
+            toSelect.style.boxShadow = "0 0 12px #2563eb";
+            setTimeout(() => { toSelect.style.boxShadow = ""; }, 400);
         }
 
-        // التحكم في عداد الركاب (+ / -)
         function updatePassengers(amount) {
             passengerAmount += amount;
             if (passengerAmount < 1) passengerAmount = 1;
-            if (passengerAmount > 9) passengerAmount = 9; // حد أقصى للحجز الفردي القياسي
+            if (passengerAmount > 9) passengerAmount = 9;
             document.getElementById('passengerCount').innerText = passengerAmount;
         }
 
-        // الدالة السحرية للربط العميق (Deep Linking) وتمرير المعطيات
         function executeQarenMegaSearch() {
             const from = document.getElementById('fromCity').value;
             const to = document.getElementById('toCity').value;
             const depDate = document.getElementById('departureDate').value;
-            const retDate = document.getElementById('returnDate').value;
             const hotelVal = document.getElementById('hotelSelect').value;
             const hotelText = document.getElementById('hotelSelect').options[document.getElementById('hotelSelect').selectedIndex].text;
 
@@ -537,31 +662,34 @@
                 return;
             }
 
-            // صياغة الروابط الذكية ممرر بها المطارات والتواريخ وعدد الركاب تلقائياً
+            // توليد الروابط الذكية ممرر بها كافة البيانات
             const adealDeepLink = `https://www.flyadeal.com/ar/booking/select?origin=${from}&destination=${to}&departureDate=${depDate}&adt=${passengerAmount}&chd=0&inf=0&utm_source=qaren`;
             const nasDeepLink = `https://www.flynas.com/ar/booking/flight-search?origin=${from}&destination=${to}&departure=${depDate}&adults=${passengerAmount}&utm_source=qaren`;
 
-            // تحديث الأزرار بالروابط الجديدة الحية
             document.getElementById('adealLinkUrl').href = adealDeepLink;
             document.getElementById('nasLinkUrl').href = nasDeepLink;
             
             document.getElementById('adealDetails').innerText = `رحلة من (${from}) إلى (${to}) لعدد ${passengerAmount} مسافر(ين) بتاريخ ${depDate}`;
             document.getElementById('nasDetails').innerText = `طيران اقتصادي مباشر من (${from}) إلى (${to}) لعدد ${passengerAmount} مسافر(ين)`;
 
-            // التحقق من حجز الفندق المفضل وتجهيز الرابط
+            // حساب وعرض السعر الذكي للمطارات المختارة بناءً على طلبك
+            const priceAdeal = calculateMockPrice(from, to, 'adeal');
+            const priceNas = calculateMockPrice(from, to, 'nas');
+            
+            document.getElementById('adealPrice').innerText = `السعر التقريبي الكلي: ${priceAdeal} ريال سعودي`;
+            document.getElementById('nasPrice').innerText = `السعر التقريبي الكلي: ${priceNas} ريال سعودي`;
+
             const hotelCard = document.getElementById('hotelCardResult');
             if(hotelVal !== "none") {
                 let hotelSearchUrl = "https://www.google.com/travel/search";
-                
-                if(hotelVal === "Makkah-Clock-Tower") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%81%D9%86%D8%AF%D9%82+%D8%B3%D8%A7%D8%B9%D9%87+%D9%85%D9%83%D9%87+%D8%A7%D9%84%D9%85%D9%83%D8%B1%D9%85%D9%8e";
-                else if(hotelVal === "Anwar-Al-Madinah") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%81%D9%86%D8%AF%D9%82+%D8%A3%D9%86%D9%88%D8%A7%D8%B1+%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9+%D9%85%D9%88%DA%A4%D9%86%D8%A8%D9%8A%D9%83";
-                else if(hotelVal === "Nujuma-Ritz-Carlton") hotelSearchUrl = "https://www.google.com/travel/search?q=Nujuma,+a+Ritz-Carlton+Reserve";
-                else if(hotelVal === "Radisson-Blu-Khobar") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%85%D9%86%D8%AA%D8%AC%D8%B9+%D8%AF%D8%A7%D8%AF%D9%8A%D8%B3%D9%85%D9%86+%D8%A8%D9%84%D9%88+%D8%A7%D9%84%D8%AE%D8%A8%D8%B1";
+                if(hotelVal === "Makkah-Clock-Tower") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%81%D9%86%D8%AF%D9%82+%D8%B3%D8%A7%D8%B9%D9%87+%D9%85%D9%83%D9%87";
+                else if(hotelVal === "Anwar-Al-Madinah") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%81%D9%86%D8%AF%D9%82+%D8%A3%D9%86%D9%88%D8%A7%D8%B1+%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9";
+                else if(hotelVal === "Nujuma-Ritz-Carlton") hotelSearchUrl = "https://www.google.com/travel/search?q=Nujuma+Ritz+Carlton";
+                else if(hotelVal === "Radisson-Blu-Khobar") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%85%D9%86%D8%AA%D8%AC%D8%B9+%D8%B1%D8%A7%D8%AF%D9%8A%D8%B3%D9%88%D9%86+%D8%A8%D9%84%D9%88+%D8%A7%D9%84%D8%AE%D8%A8%D8%B1";
                 else if(hotelVal === "Nofa-Resort-Riyadh") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%85%D9%86%D8%AA%D8%AC%D8%B9+%D9%86%D9%88%D9%81%D8%A7+%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6";
                 else if(hotelVal === "Rixos-Premium-Alamein") hotelSearchUrl = "https://www.google.com/travel/search?q=Rixos+Premium+Alamein";
-                else if(hotelVal === "Rixos-Sharm-El-Sheikh") hotelSearchUrl = "https://www.google.com/travel/search?q=.%D8%B1%D9%8A%D9%83%D8%B3%D9%88%D8%B3+%D8%B4%D8%B1%D9%85+%D8%A7%D9%84%D8%B4%D9%8A%D8%AE";
-                else if(hotelVal === "Four-Seasons-Alexandria") hotelSearchUrl = "https://www.google.com/travel/search?q=%D9%81%D9%86%D8%AF%D9%82+%D9%81%D9%88%D8%B1+%D8%B3%D9%8A%D8%B2%D9%88%D9%86%D8%B2+%D8%A7%D9%84%D8%A5%D8%B3%D9%83%D9%86%D8%AF%D8%B1%D9%8A%D8%A9";
-                else if(hotelVal === "Meraki-Resort-Hurghada") hotelSearchUrl = "https://www.google.com/travel/search?q=Meraki+Resort";
+                else if(hotelVal === "Rixos-Sharm-El-Sheikh") hotelSearchUrl = "https://www.google.com/travel/search?q=Rixos+Sharm+El+Sheikh";
+                else if(hotelVal === "Four-Seasons-Alexandria") hotelSearchUrl = "https://www.google.com/travel/search?q=Four+Seasons+Alexandria";
 
                 document.getElementById('chosenHotelTitle').innerText = hotelText;
                 document.getElementById('hotelLinkUrl').href = hotelSearchUrl;
@@ -570,7 +698,6 @@
                 hotelCard.style.display = 'none';
             }
 
-            // إظهار النتائج وعمل سكرول ناعم مريح للعميل
             document.getElementById('qarenResultsBlock').style.display = 'block';
             document.getElementById('qarenResultsBlock').scrollIntoView({ behavior: 'smooth' });
         }
