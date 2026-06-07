@@ -704,3 +704,349 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة قارن | الساعات المتحركة والذكر التلقائي</title>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --text-color: #f8fafc;
+            --accent-gold: #d4af37;
+            --primary-green: #039855;
+            --card-bg: #1c2541;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            width: 100%;
+            background: linear-gradient(135deg, #1c2541, #0b1329);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--accent-gold);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .clocks-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .clock-card {
+            background-color: var(--card-bg);
+            border: 2px solid #3a506b;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            width: 260px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+        }
+
+        .clock-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+        }
+
+        .clock-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            color: var(--text-color);
+        }
+
+        /* تصميم الساعة الأنالوج */
+        .analog-clock {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #0b1329;
+            border: 6px solid var(--accent-gold);
+            position: relative;
+            margin: 0 auto 20px auto;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* تخصيصات إضافية لساعة مكة الفاخرة */
+        .makkah-style {
+            border-color: var(--accent-gold);
+            box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.2), 0 4px 10px rgba(0,0,0,0.5);
+        }
+        
+        /* ساعة المدينة الخضراء المهيبة */
+        .madinah-style {
+            border-color: #10b981;
+            box-shadow: inset 0 0 25px rgba(16, 185, 129, 0.2), 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .analog-clock .center-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .analog-clock .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            z-index: 5;
+        }
+
+        .analog-clock .hour-hand {
+            width: 6px;
+            height: 50px;
+            background: var(--text-color);
+        }
+
+        .analog-clock .minute-hand {
+            width: 4px;
+            height: 70px;
+            background: #cbd5e1;
+        }
+
+        .analog-clock .second-hand {
+            width: 2px;
+            height: 75px;
+            background: #ef4444;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        /* أرقام أو علامات الساعة */
+        .analog-clock .number {
+            position: absolute;
+            font-size: 14px;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .analog-clock .n12 { top: 5px; left: 50%; transform: translateX(-50%); color: var(--accent-gold); }
+        .analog-clock .n3 { right: 10px; top: 50%; transform: translateY(-50%); }
+        .analog-clock .n6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+        .analog-clock .n9 { left: 10px; top: 50%; transform: translateY(-50%); }
+
+        .digital-time {
+            font-size: 22px;
+            font-weight: bold;
+            font-family: monospace;
+            color: var(--accent-gold);
+            background: #0b1329;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        
+        .madinah-text {
+            color: #10b981 !important;
+        }
+
+        /* لافتة التذكير بـ "صلى على النبي" المنبثقة التلقائية */
+        .dhikr-banner {
+            position: fixed;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #039855, #027a44);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(3, 152, 85, 0.5);
+            border: 3px solid var(--accent-gold);
+            text-align: center;
+            z-index: 10000;
+            transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dhikr-banner.show {
+            bottom: 40px;
+        }
+
+        .dhikr-banner .icon {
+            font-size: 30px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>منصة قارن | التوقيتات الحية والذكر المبارك</h1>
+        <p>رسوم متحركة متزامنة ليوم بيوم لعام 2026 مع تذكير آلي بالصلاة على النبي</p>
+    </header>
+
+    <div class="clocks-container">
+        <!-- ساعة مكة المكرمة -->
+        <div class="clock-card">
+            <h3>🕋 ساعة مكة المكرمة</h3>
+            <div class="analog-clock makkah-style" id="makkahAnalog">
+                <div class="center-dot"></div>
+                <div class="hand hour-hand" id="makkahHour"></div>
+                <div class="hand minute-hand" id="makkahMin"></div>
+                <div class="hand second-hand" id="makkahSec"></div>
+                <div class="number n12">١٢</div>
+                <div class="number n3">٣</div>
+                <div class="number n6">٦</div>
+                <div class="number n9">٩</div>
+            </div>
+            <div class="digital-time" id="makkahDigital">00:00:00</div>
+        </div>
+
+        <!-- ساعة المدينة المنورة -->
+        <div class="clock-card">
+            <h3 style="color: #10b981;">🟢 ساعة المدينة المنورة</h3>
+            <div class="analog-clock madinah-style" id="madinahAnalog">
+                <div class="center-dot"></div>
+                <div class="hand hour-hand" id="madinahHour"></div>
+                <div class="hand minute-hand" id="madinahMin"></div>
+                <div class="hand second-hand" id="madinahSec"></div>
+                <div class="number n12">١٢</div>
+                <div class="number n3">٣</div>
+                <div class="number n6">٦</div>
+                <div class="number n9">٩</div>
+            </div>
+            <div class="digital-time madinah-text" id="madinahDigital">00:00:00</div>
+        </div>
+
+        <!-- ساعة مصر -->
+        <div class="clock-card">
+            <h3 style="color: #3b82f6;">🇪🇬 ساعة جمهورية مصر</h3>
+            <div class="analog-clock" id="egyptAnalog" style="border-color: #3b82f6;">
+                <div class="center-dot"></div>
+                <div class="hand hour-hand" id="egyptHour"></div>
+                <div class="hand minute-hand" id="egyptMin"></div>
+                <div class="hand second-hand" id="egyptSec"></div>
+                <div class="number n12">١٢</div>
+                <div class="number n3">٣</div>
+                <div class="number n6">٦</div>
+                <div class="number n9">٩</div>
+            </div>
+            <div class="digital-time" id="egyptDigital" style="color: #3b82f6;">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- نافذة الذكر الآلي المضيئة -->
+    <div class="dhikr-banner" id="dhikrBanner">
+        <span class="icon">✨</span>
+        <span>صَلِّى عَلَى النَّبِيِّ ﷺ</span>
+        <span class="icon">✨</span>
+    </div>
+
+    <script>
+        // دالة تشغيل وتحديث حركات الساعات والتروس المتزامنة تلقائياً
+        function updateAllClocks() {
+            // الحصول على التوقيت الحالي للكمبيوتر والجهاز
+            const now = new Date();
+            
+            // حساب الساعات بالاعتماد على الفروق الزمنية القياسية (مصر والسعودية حالياً في نفس التوقيت UTC+3 لعدم تطبيق التوقيت الصيفي بمصر في الشتاء أو للتزامن التام)
+            // لحساب فروق حقيقية نستخدم أوقات الـ UTC
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcSeconds = now.getUTCSeconds();
+
+            // توقيت السعودية (مكة والمدينة) = UTC + 3
+            let saudiHour = (utcHours + 3) % 12;
+            // توقيت مصر = UTC + 3 (بناء على التوقيت المعتمد حالياً لعام 2026)
+            let egyptHour = (utcHours + 3) % 12;
+
+            // حساب درجات الدوران لعقارب الساعة الأنالوج بالرسوم المتحركة
+            const secondsDeg = (utcSeconds / 60) * 360;
+            const minutesDeg = ((utcMinutes * 60 + utcSeconds) / 3600) * 360;
+            
+            const makkahHoursDeg = ((saudiHour * 3600 + utcMinutes * 60 + utcSeconds) / 43200) * 360;
+            const madinahHoursDeg = ((saudiHour * 3600 + utcMinutes * 60 + utcSeconds) / 43200) * 360;
+            const egyptHoursDeg = ((egyptHour * 3600 + utcMinutes * 60 + utcSeconds) / 43200) * 360;
+
+            // تحريك العقارب في صفحة الـ HTML
+            document.getElementById('makkahSec').style.transform = `rotate(${secondsDeg}deg)`;
+            document.getElementById('makkahMin').style.transform = `rotate(${minutesDeg}deg)`;
+            document.getElementById('makkahHour').style.transform = `rotate(${makkahHoursDeg}deg)`;
+
+            document.getElementById('madinahSec').style.transform = `rotate(${secondsDeg}deg)`;
+            document.getElementById('madinahMin').style.transform = `rotate(${minutesDeg}deg)`;
+            document.getElementById('madinahHour').style.transform = `rotate(${madinahHoursDeg}deg)`;
+
+            document.getElementById('egyptSec').style.transform = `rotate(${secondsDeg}deg)`;
+            document.getElementById('egyptMin').style.transform = `rotate(${minutesDeg}deg)`;
+            document.getElementById('egyptHour').style.transform = `rotate(${egyptHoursDeg}deg)`;
+
+            // تحديث الساعات الديجيتال بالأسفل رقمياً
+            const formatTime = (h, m, s) => {
+                let hh = (h + 3) % 24; // نظام 24 ساعة للعرض الديجيتال
+                return `${hh < 10 ? '0'+hh : hh}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            };
+
+            document.getElementById('makkahDigital').innerText = formatTime(utcHours, utcMinutes, utcSeconds);
+            document.getElementById('madinahDigital').innerText = formatTime(utcHours, utcMinutes, utcSeconds);
+            document.getElementById('egyptDigital').innerText = formatTime(utcHours, utcMinutes, utcSeconds);
+        }
+
+        // تشغيل عداد الساعات في الخلفية ليتحدث كل ثانية واحدة بدقة
+        setInterval(updateAllClocks, 1000);
+        updateAllClocks(); // تشغيل فوري أول ما الصفحة تفتح
+
+        // كود تشغيل لافتة التذكير "صلى على النبي" لتظهر كل 30 ثانية وتختفي بعد 5 ثواني
+        setInterval(function() {
+            const banner = document.getElementById('dhikrBanner');
+            banner.classList.add('show'); // إظهار
+
+            // إخفاء اللافثة تلقائياً بعد 5 ثواني من ظهورها المضيء
+            setTimeout(function() {
+                banner.classList.remove('show');
+            }, 5000);
+
+        }, 30000); // 30000 مللي ثانية تعادل 30 ثانية بالتمام والكمال
+    </script>
+</body>
+                </html>
