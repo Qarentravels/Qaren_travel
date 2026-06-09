@@ -131,6 +131,26 @@
 
     }
     body {
+        <script>
+    // عند تحميل الصفحة بالكامل، يبدأ احتساب الوقت لتلاشي الشاشة
+    window.addEventListener('DOMContentLoaded', function() {
+        
+        // انتظر ثانيتين (2000 مللي ثانية) لكي تنتهي حركة الطائرة وتظهر كلمة Qaran Travel
+        setTimeout(function() {
+            const introSplash = document.getElementById('intro-splash');
+            
+            if (introSplash) {
+                // إضافة كلاس الاختفاء التدريجي (الـ CSS سيقوم بعمل التلاشي في 0.8 ثانية)
+                introSplash.classList.add('exit-active');
+                
+                // إزالة العنصر تماماً من الصفحة بعد انتهاء التلاشي لكي لا يحجب أزرار الموقع
+                setTimeout(function() {
+                    introSplash.remove();
+                }, 800);
+            }
+        }, 2500); // يمكنك تعديل الرقم 2500 (ثانيتين ونصف) إذا أردت زيادة أو تقليل وقت بقاء الشاشة
+    });
+</script>
         top: 0 !important;
     }
 </style>
