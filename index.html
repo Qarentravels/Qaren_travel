@@ -70,11 +70,7 @@
 </head>
 
 <body>
-<div id="splash-screen">
-    <div class="loader-content">
-        <div class="plane-icon">✈️</div>
-        <h1 class="brand-name">Qaran Travel</h1>
-    </div>
+
 </div>
 <div id="google_translate_element"></div>
 <div class="background-container">
@@ -124,96 +120,7 @@
 <div id="google_translate_element" style="display: none;"></div>
 
 <style>
- /* إعدادات شاشة التحميل كاملة */
-#splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: #ffffff; /* خلفية بيضاء مريحة للعين */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999; /* للتأكد من ظهورها فوق كل عناصر الموقع */
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
 
-.loader-content {
-    text-align: center;
-}
-
-/* حركة الطائرة الدائرية */
-.plane-icon {
-    font-size: 3.5rem;
-    display: inline-block;
-    animation: rotatePlane 2s linear infinite;
-    margin-bottom: 15px;
-}
-
-/* تنسيق وحركة الاسم باللون الأخضر */
-.brand-name {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #28a745; /* اللون الأخضر المطلوب */
-    font-size: 2.5rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    animation: pulseText 1.5s ease-in-out infinite alternate;
-}
-
-/* أنيميشن دوران الطائرة */
-@keyframes rotatePlane {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* أنيميشن نبض النص لتأثير حيوي */
-@keyframes pulseText {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(1.05);
-        opacity: 1;
-    }
-}
-
-/* كلاس يستخدم لإخفاء الشاشة بسلاسة عبر الجافاسكربت */
-.fade-out {
-    opacity: 0 !important;
-    visibility: hidden !important;
-}   
-    /* تنسيق أزرار اللغة */
-    .lang-switch-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 6px 14px;
-        border-radius: 20px;
-        backdrop-filter: blur(5px);
-    }
-
-    .lang-btn {
-        background: none;
-        border: none;
-        color: #ffffff; /* لون النص أبيض ليناسب خلفية الطائرة */
-        font-size: 0.95rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: color 0.2s ease;
-        padding: 2px 6px;
-    }
-
-    /* تأثير عند تمرير الماوس فوق الزر */
-    .lang-btn:hover {
-        color: #ffc107; /* يتحول للون الذهبي */
-    }
 
     .lang-divider {
         color: rgba(255, 255, 255, 0.5);
