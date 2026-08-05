@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light-mode">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قارن | Qaren - وجهتك الأولى لمقارنة أسعار السفر</title>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+    :root {
+        --primary-green: #039855;
+        --primary-hover: #027a44;
+        --bg-light: #f9fafb;
+        --text-main: #1f2937;
+        --text-muted: #6b7280;
+        --border-color: #d1d5db;
+        --card-bg: #ffffff;
+        --chip-bg: #f3f4f6;
+        --glow-color: rgba(37, 99, 235, 0.4);
+        --price-color: #b45309;
+        --accent-blue: #2563eb;
+    }
+
+    .dark-mode {
+        --bg-light: #0f172a;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --card-bg: #1e293b;
+        --chip-bg: #334155;
+        --primary-green: #10b981;
+        --primary-hover: #059669;
+        --price-color: #fbbf24;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-light);
+        margin: 0;
+        padding: 0;
+        color: var(--text-main);
+        transition: background-color 0.3s, color 0.3s;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Hero header with real background photo ===== */
+    header {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-image:
+            linear-gradient(180deg, rgba(3,44,25,0.55), rgba(3,60,35,0.75));
+        background-attachment: scroll;
+        color: white;
+        padding: 40px 20px 70px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        transition: background-color 0.3s;
+        overflow: hidden;
+    }
+    .header-bg-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 60%;
+        z-index: 0;
+    }
+    .header-container, .hero-tagline, .clocks-container, .scroll-hint {
+        position: relative;
+        z-index: 1;
+    }
+    .scroll-hint {
+        position: absolute;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 26px;
+        color: rgba(255,255,255,0.85);
+        animation: bounceDown 1.8s ease-in-out infinite;
+    }
+    @keyframes bounceDown {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    .header-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .brand-block { display: flex; align-items: center; gap: 12px; }
+
+    .qaren-logo {
+        width: 45px; height: 45px;
+        background-color: white;
+        color: #039855;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px; font-weight: 900;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        border: 2px solid rgba(255,255,255,0.8);
+        transition: transform 0.3s ease;
+    }
+    .brand-block:hover .qaren-logo { transform: rotate(360deg); }
+
+    header h1 { margin: 0; font-size: 26px; font-weight: 700; }
+    header p { margin: 4px 0 0 0; font-size: 13.5px; opacity: 0.92; }
+
+    .theme-toggle {
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13.5px;
+        transition: all 0.2s;
+        display: flex; align-items: center; gap: 8px;
+        font-family: inherit;
+    }
+    .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+
+    .hero-tagline {
+        max-width: 620px;
+        margin: 26px auto 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.9);
+    }
+
+    /* ===== Clocks ===== */
+    .clocks-container {
+        display: flex; justify-content: center; gap: 16px;
+        margin-top: 24px; flex-wrap: wrap;
+    }
+    .clock-box {
+        background: rgba(255,255,255,0.95);
+        padding: 12px 18px;
+        border-radius: 14px;
+        text-align: center;
+        color: #033a22;
+        font-weight: bold;
+        min-width: 140px;
+    }
+    .clock-box h3 { margin: 0 0 4px 0; font-size: 13px; }
+    .clock { font-size: 20px; font-family: 'Courier New', monospace; letter-spacing: 1px; }
+
+    /* ===== Container / cards ===== */
+    .container {
+        max-width: 680px;
+        margin: -30px auto 40px auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .search-card, .addon-card {
+        background: var(--card-bg);
+        padding: 28px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
+        transition: background-color 0.3s, border-color 0.3s;
+        margin-bottom: 22px;
+    }
+
+    .addon-title {
+        font-size: 16px; font-weight: bold; color: var(--text-main);
+        margin-bottom: 15px; border-right: 4px solid var(--accent-blue);
+        padding-right: 8px; display: flex; align-items: center; gap: 8px;
+    }
+
+    .popular-section { margin-bottom: 22px; }
+    .popular-title { font-size: 14px; font-weight: bold; color: var(--text-main); margin-bottom: 10px; }
+    .chips-container { display: block; text-align: right; margin-bottom: 15px; }
+    .chip {
+        display: inline-block; padding: 8px 16px; background-color: var(--chip-bg);
+        border: 1px solid var(--border-color); border-radius: 50px; font-size: 14px;
+        cursor: pointer; margin-left: 8px; margin-bottom: 8px; color: var(--text-main);
+        transition: all 0.2s ease;
+    }
+    .chip:hover { box-shadow: 0 0 8px var(--glow-color); border-color: var(--accent-blue); }
+
+    .trip-tabs { display: table; width: 100%; margin-bottom: 22px; border-bottom: 2px solid var(--border-color); }
+    .tab-item {
+        display: table-cell; text-align: center; padding: 12px 0; font-weight: bold;
+        font-size: 16px; color: var(--text-muted); cursor: pointer; width: 50%; transition: all 0.2s;
+    }
+    .tab-item.active { color: var(--primary-green); border-bottom: 3px solid var(--primary-green); }
+
+    .form-group { margin-bottom: 18px; text-align: right; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-main); }
+
+    select, input[type="date"], input[type="email"] {
+        width: 100%; padding: 12px 16px; border: 1px solid var(--border-color);
+        border-radius: 8px; font-size: 15px; background-color: var(--card-bg);
+        box-sizing: border-box; color: var(--text-main); font-family: inherit;
+        transition: all 0.2s ease, box-shadow 0.1s;
+    }
+    select:focus, input:focus {
+        outline: none; border-color: var(--accent-blue) !important;
+        box-shadow: 0 0 12px var(--glow-color) !important;
+    }
+
+    .force-side-by-side { display: flex; gap: 12px; }
+    .force-side-by-side .form-group { flex: 1; }
+
+    .btn-search {
+        width: 100%; padding: 15px; background-color: var(--primary-green); color: white;
+        border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+        margin-top: 6px; box-shadow: 0 4px 12px rgba(3, 152, 85, 0.25); transition: all 0.2s;
+        font-family: inherit;
+    }
+    .btn-search:hover { background-color: var(--primary-hover); }
+    .btn-search:active { transform: scale(0.99); }
+
+    .smart-advice {
+        background: rgba(37, 99, 235, 0.08); border-right: 4px solid var(--accent-blue);
+        padding: 12px; border-radius: 4px 8px 8px 4px; margin-bottom: 18px; font-size: 14px;
+        display: none; font-weight: 500;
+    }
+
+    .price-cycle-note {
+        font-size: 12px; color: var(--text-muted); text-align: center; margin-top: -6px;
+        margin-bottom: 18px; font-family: 'Courier New', monospace;
+    }
+    .price-cycle-note b { color: var(--primary-green); }
+
+    .results-section { margin-top: 26px; display: none; animation: fadeIn 0.4s ease-in-out; }
+    .results-title {
+        font-size: 16px; font-weight: bold; margin-bottom: 15px; color: var(--text-main);
+        border-right: 4px solid var(--primary-green); padding-right: 8px;
+    }
+
+    .result-card {
+        background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 14px;
+        border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+    .result-card.best-price { border-color: var(--primary-green); border-width: 2px; }
+    .best-tag {
+        display: inline-block; background: var(--primary-green); color: white; font-size: 11px;
+        padding: 2px 10px; border-radius: 20px; margin-bottom: 8px; font-weight: bold;
+    }
+    .card-flex { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .provider-info strong { font-size: 16px; color: var(--text-main); display: block; }
+    .provider-info span { font-size: 13px; color: var(--text-muted); margin-top: 4px; display: block; }
+    .price-badge {
+        font-size: 18px; font-weight: bold; color: var(--price-color);
+        background: rgba(3, 152, 85, 0.1); padding: 4px 10px; border-radius: 6px;
+        margin-top: 6px; display: inline-block;
+    }
+    .price-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    .actions-flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .btn-go-book {
+        padding: 10px 22px; color: white; text-decoration: none; border-radius: 6px;
+        font-weight: bold; font-size: 14px; transition: opacity 0.2s;
+    }
+    .btn-go-book:hover { opacity: 0.9; }
+    .adeal-btn { background-color: #512da8; }
+    .nas-btn { background-color: #ffb300; color: #1f2937 !important; }
+    .hotel-btn { background-color: var(--primary-green); }
+
+    .btn-whatsapp {
+        background-color: #25d366; color: white; border: none; padding: 10px 14px;
+        border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold;
+        display: flex; align-items: center; gap: 5px; text-decoration: none;
+    }
+
+    .luggage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+    .luggage-box {
+        background: var(--chip-bg); padding: 12px; border-radius: 8px; text-align: center;
+        font-size: 14px; border: 1px solid var(--border-color);
+    }
+    .luggage-box strong { color: var(--primary-green); display: block; font-size: 16px; margin-top: 4px; }
+
+    .alert-form { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-alert {
+        background-color: var(--accent-blue); color: white; border: none; padding: 0 20px;
+        border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; font-family: inherit;
+    }
+
+    .guide-container {
+        display: none; margin-top: 15px; background: rgba(16, 185, 129, 0.05); padding: 15px;
+        border-radius: 10px; border: 1px dashed var(--primary-green);
+    }
+
+    .klook-banner {
+        margin: 0 0 22px; border-radius: 15px; overflow: hidden;
+        background: linear-gradient(135deg, #ff5b60, #ff8c91);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15); transition: transform 0.3s ease;
+    }
+    .klook-banner:hover { transform: scale(1.01); }
+    .klook-banner a { text-decoration: none; color: white; display: block; padding: 26px; text-align: center; }
+    .banner-content h2 { margin: 0 0 8px 0; font-size: 18px; }
+    .banner-content p { margin: 0; font-size: 13.5px; opacity: 0.95; }
+    .banner-btn {
+        display: inline-block; margin-top: 14px; padding: 9px 22px; background: white;
+        color: #ff5b60; border-radius: 50px; font-weight: bold; font-size: 13.5px;
+    }
+
+    .lang-switch-container { text-align: center; padding: 20px; }
+    .lang-btn {
+        background: none; border: none; color: var(--text-muted); font-weight: bold;
+        cursor: pointer; font-size: 13px; font-family: inherit;
+    }
+    .lang-divider { color: var(--border-color); margin: 0 6px; }
+    #google_translate_element { display: none; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ===== Intro plane splash ===== */
+    #intro-splash {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        background: radial-gradient(circle, #0c1b2b 0%, #050b14 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999;
+        overflow: hidden;
+        perspective: 1000px;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #intro-splash.exit-active { opacity: 0 !important; visibility: hidden !important; }
+    .scene3d {
+        position: relative; width: 100%; height: 100%;
+        display: flex; justify-content: center; align-items: center;
+        transform-style: preserve-3d;
+    }
+    .plane-3d {
+        font-size: 6rem;
+        position: absolute;
+        transform: translateZ(-800px) rotateY(180deg) rotateX(10deg);
+        opacity: 0;
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
+        animation: fly3d 2.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+    @keyframes fly3d {
+        0% { transform: translateZ(-1000px) rotateY(150deg) rotateX(20deg) translateY(50px); opacity: 0; }
+        30% { opacity: 1; transform: translateZ(-200px) rotateY(180deg) rotateX(5deg) translateY(0); }
+        60% { opacity: 1; transform: translateZ(200px) rotateY(210deg) rotateX(-10deg) translateX(-50px); }
+        100% { opacity: 0; transform: translateZ(800px) rotateY(240deg) rotateX(-20deg) translateX(-200px); }
+    }
+    .brand-3d {
+        font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
+        color: #2da94f;
+        font-size: 2.6rem;
+        font-weight: 900;
+        letter-spacing: 3px;
+        opacity: 0;
+        transform: scale(0.7) translateZ(-100px);
+        text-shadow: 0 0 20px rgba(45, 169, 79, 0.6), 0 0 40px rgba(45, 169, 79, 0.2);
+        animation: showText 1.2s 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes showText {
+        0% { opacity: 0; transform: scale(0.7) translateZ(-100px); }
+        100% { opacity: 1; transform: scale(1) translateZ(0); }
+    }
+    @media (max-width: 600px) {
+        .plane-3d { font-size: 4rem; }
+        .brand-3d { font-size: 1.9rem; letter-spacing: 2px; }
+    }
+
+    @media (max-width: 600px) {
+        header h1 { font-size: 20px; }
+        .theme-toggle span:last-child { display: none; }
+        .force-side-by-side { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div id="intro-splash">
+    <div class="scene3d">
+        <div class="plane-3d">✈️</div>
+        <h1 class="brand-3d">قارن | Qaren</h1>
+    </div>
+</div>
+
+<header>
+    <img class="header-bg-photo" src="https://images.unsplash.com/photo-1763455892848-39bbc7ca90a0?auto=format&fit=crop&w=1920&q=80" alt="جناح طائرة فوق الغيوم عند الغروب">
+    <div class="header-container">
+        <div class="brand-block">
+            <div class="qaren-logo">ق</div>
+            <div style="text-align: right;">
+                <h1>قارن | Qaren</h1>
+                <p>وجهتك الأولى لمقارنة أسعار السفر بين مصر والسعودية</p>
+            </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleDarkMode()">
+            <span id="themeIcon">🌙</span> <span id="themeText">الوضع الداكن</span>
+        </button>
+    </div>
+
+    <p class="hero-tagline">قارن أسعار طيران أديل وطيران ناس في مكان واحد، واحجز مباشرة من الموقع الرسمي لشركة الطيران.</p>
+
+    <div class="clocks-container">
+        <div class="clock-box"><h3>مكة المكرمة</h3><div class="clock" id="makkah">--:--:--</div></div>
+        <div class="clock-box"><h3>المدينة المنورة</h3><div class="clock" id="madinah">--:--:--</div></div>
+        <div class="clock-box"><h3>القاهرة</h3><div class="clock" id="cairo">--:--:--</div></div>
+    </div>
+
+    <div class="scroll-hint">⌄</div>
+</header>
+
+<div class="container">
+
+    <div class="klook-banner">
+        <a href="https://klook.tpx.lv/RVSiw23D" target="_blank" rel="noopener">
+            <div class="banner-content">
+                <h2>🚗 استئجار سيارات بأسعار اقتصادية</h2>
+                <p>احجز سيارتك الآن مع Klook واستمتع بأفضل العروض!</p>
+                <span class="banner-btn">اضغط هنا للحجز</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- كارت البحث الرئيسي -->
+    <div class="search-card">
+
+        <div class="popular-section">
+            <div class="popular-title">وجهات شائعة</div>
+            <div class="chips-container">
+                <span class="chip" onclick="quickSelectDestination('RUH')">📍 الرياض</span>
+                <span class="chip" onclick="quickSelectDestination('JED')">📍 جدة</span>
+                <span class="chip" onclick="quickSelectDestination('Makkah')">🕋 مكة المكرمة</span>
+                <span class="chip" onclick="quickSelectDestination('MED')">📍 المدينة المنورة</span>
+            </div>
+        </div>
+
+        <div class="trip-tabs">
+            <div class="tab-item active" id="tabRoundTrip" onclick="setTripType('round')">ذهاب وعودة</div>
+            <div class="tab-item" id="tabOneWay" onclick="setTripType('one-way')">ذهاب فقط</div>
+        </div>
+
+        <div class="form-group">
+            <label>من أين تسافر؟ (مدينة المغادرة)</label>
+            <select id="fromCity">
+                <optgroup label="جمهورية مصر العربية">
+                    <option value="CAI">القاهرة الدولي (CAI) - الرئيسي</option>
+                    <option value="HBE">برج العرب - الإسكندرية (HBE)</option>
+                    <option value="SPX">سفنكس الدولي - الجيزة (SPX)</option>
+                    <option value="SSH">شرم الشيخ الدولي (SSH)</option>
+                    <option value="HRG">الغردقة الدولي (HRG)</option>
+                    <option value="LXR">الأقصر الدولي (LXR)</option>
+                    <option value="ASW">أسوان الدولي (ASW)</option>
+                    <option value="ATZ">أسيوط الدولي (ATZ)</option>
+                    <option value="RMF">مرسى علم الدولي (RMF)</option>
+                    <option value="SOH">سوهاج الدولي (SOH)</option>
+                </optgroup>
+                <optgroup label="المملكة العربية السعودية">
+                    <option value="JED">الملك عبد العزيز - جدة (JED)</option>
+                    <option value="RUH">الملك خالد - الرياض (RUH)</option>
+                    <option value="DMM">الملك فهد - الدمام (DMM)</option>
+                    <option value="MED">الأمير محمد بن عبد العزيز - المدينة المنورة (MED)</option>
+                    <option value="AHB">أبها الدولي (AHB)</option>
+                    <option value="TYF">الطائف الدولي (TYF)</option>
+                    <option value="ELQ">الأمير نايف - القصيم (ELQ)</option>
+                    <option value="HAS">حائل الدولي (HAS)</option>
+                    <option value="GIZ">الملك عبد الله - جيزان (GIZ)</option>
+                    <option value="YNB">ينبع الصناعي (YNB)</option>
+                    <option value="ULH">العلا الدولي (ULH)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>الوجهة (إلى)</label>
+            <select id="toCity" onchange="triggerDynamicAdvice()">
+                <optgroup label="جمهورية مصر العربية">
+                    <option value="CAI">القاهرة الدولي (CAI) - الرئيسي</option>
+                    <option value="HBE">برج العرب - الإسكندرية (HBE)</option>
+                    <option value="SPX">سفنكس الدولي - الجيزة (SPX)</option>
+                    <option value="SSH">شرم الشيخ الدولي (SSH)</option>
+                    <option value="HRG">الغردقة الدولي (HRG)</option>
+                    <option value="LXR">الأقصر الدولي (LXR)</option>
+                    <option value="ASW">أسوان الدولي (ASW)</option>
+                    <option value="ATZ">أسيوط الدولي (ATZ)</option>
+                    <option value="RMF">مرسى علم الدولي (RMF)</option>
+                    <option value="SOH">سوهاج الدولي (SOH)</option>
+                </optgroup>
+                <optgroup label="المملكة العربية السعودية">
+                    <option value="JED" selected>الملك عبد العزيز - جدة (JED)</option>
+                    <option value="RUH">الملك خالد - الرياض (RUH)</option>
+                    <option value="DMM">الملك فهد - الدمام (DMM)</option>
+                    <option value="MED">الأمير محمد بن عبد العزيز - المدينة المنورة (MED)</option>
+                    <option value="AHB">أبها الدولي (AHB)</option>
+                    <option value="TYF">الطائف الدولي (TYF)</option>
+                    <option value="ELQ">الأمير نايف - القصيم (ELQ)</option>
+                    <option value="HAS">حائل الدولي (HAS)</option>
+                    <option value="GIZ">الملك عبد الله - جيزان (GIZ)</option>
+                    <option value="YNB">ينبع الصناعي (YNB)</option>
+                    <option value="ULH">العلا الدولي (ULH)</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="smart-advice" id="adviceBanner"></div>
+
+        <div class="form-group">
+            <label>تاريخ المغادرة</label>
+            <input type="date" id="departureDate" onchange="triggerDynamicAdvice()">
+        </div>
+
+        <div class="form-group" id="returnDateGroup">
+            <label>تاريخ العودة</label>
+            <input type="date" id="returnDate">
+        </div>
+
+        <div class="form-group">
+            <label>الدرجة</label>
+            <select id="cabinClass">
+                <option value="economy">الدرجة الاقتصادية</option>
+                <option value="premium">الاقتصادية المميزة</option>
+                <option value="business">درجة رجال الأعمال</option>
+                <option value="first">الدرجة الأولى</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>الفندق المفضل (اختياري)</label>
+            <select id="hotelSelect">
+                <option value="none">-- اختر فندقاً للمقارنة أو التخطي --</option>
+                <optgroup label="أفخم فنادق المملكة">
+                    <option value="Makkah-Clock-Tower">فندق ساعة مكة المكرمة (Fairmont)</option>
+                    <option value="Anwar-Al-Madinah">فندق أنوار المدينة موڤنبيك</option>
+                </optgroup>
+                <optgroup label="أفخم فنادق مصر">
+                    <option value="Rixos-Premium-Alamein">ريكسوس بريميوم العلمين</option>
+                    <option value="Rixos-Sharm-El-Sheikh">منتجع ريكسوس شرم الشيخ</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <div class="force-side-by-side">
+                <div class="form-group">
+                    <label>بالغين (+12 سنة)</label>
+                    <select id="passengersAdult">
+                        <option value="1" selected>1 مسافر</option>
+                        <option value="2">2 مسافرين</option>
+                        <option value="3">3 مسافرين</option>
+                        <option value="4">4 مسافرين</option>
+                        <option value="5">5 مسافرين</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>أطفال (2 - 12 سنة)</label>
+                    <select id="passengersChild">
+                        <option value="0" selected>لا يوجد</option>
+                        <option value="1">1 طفل</option>
+                        <option value="2">2 أطفال</option>
+                        <option value="3">3 أطفال</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رضّع (تحت سنتين)</label>
+                    <select id="passengersInfant">
+                        <option value="0" selected>لا يوجد</option>
+                        <option value="1">1 رضيع</option>
+                        <option value="2">2 رضع</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn-search" onclick="executeQarenMegaSearch()">ابحث وقارن الأسعار 🔍</button>
+        <div class="price-cycle-note">الأسعار التقديرية تتحدث كل <b>4 ساعات</b> · آخر تحديث: <span id="priceUpdateTime">--:--</span></div>
+    </div>
+
+    <!-- حاسبة الأمتعة -->
+    <div class="addon-card">
+        <div class="addon-title">🧳 حاسبة أمتعة الطيران الاقتصادي</div>
+        <div class="form-group">
+            <label>اختر شركة الطيران لمعرفة تفاصيل الأوزان والشنط:</label>
+            <select id="luggageProvider" onchange="calculateLuggageWeight()">
+                <option value="adeal">طيران أديل (Flyadeal)</option>
+                <option value="nas">طيران ناس (Flynas)</option>
+            </select>
+        </div>
+        <div class="luggage-grid">
+            <div class="luggage-box">
+                حقيبة اليد المجانية (المقصورة)
+                <strong id="handLuggage">7 كيلو جرام</strong>
+            </div>
+            <div class="luggage-box">
+                الوزن المشحون (المسجل)
+                <strong id="checkedLuggage">20 كيلو (درجة صعد)</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- منبه الأسعار -->
+    <div class="addon-card">
+        <div class="addon-title">🔔 تفعيل منبه انخفاض الأسعار التلقائي</div>
+        <p style="margin: 0 0 10px 0; font-size: 13px; color: var(--text-muted);">اكتب بريدك الإلكتروني وسيقوم النظام بتنبيهك فور نزول السعر لهذه الرحلة.</p>
+        <div class="alert-form">
+            <input type="email" id="alertEmail" placeholder="name@example.com">
+            <button type="button" class="btn-alert" onclick="activatePriceAlert()">فعل المنبه 🚀</button>
+        </div>
+    </div>
+
+    <!-- دليل المعالم -->
+    <div class="guide-container" id="localGuideBlock">
+        <strong style="color: var(--primary-green); display:block; margin-bottom: 8px;">🗺️ المعالم والأكلات المقترحة لوجهتك الحالية:</strong>
+        <span id="guideText" style="font-size: 13px; line-height: 1.5;">جاري تجميع الدليل...</span>
+    </div>
+
+    <!-- نتائج البحث -->
+    <div id="qarenResultsBlock" class="results-section">
+        <div class="results-title" id="resultsMainTitle">الرحلات المتوفرة والحجز المباشر:</div>
+
+        <div class="result-card" id="adealCard">
+            <div class="card-flex">
+                <div class="provider-info">
+                    <span class="best-tag" id="adealBestTag" style="display:none;">الأرخص تقديرياً</span>
+                    <strong>طيران أديل (Flyadeal)</strong>
+                    <span id="adealDetails">رحلة مباشرة ببياناتك الجاهزة بالكامل</span>
+                    <div class="price-badge" id="adealPrice">السعر: جاري الحساب...</div>
+                    <div class="price-note">سعر تقديري بحسب المسار والدرجة، السعر النهائي الفعلي يظهر عند الحجز</div>
+                </div>
+                <div class="actions-flex">
+                    <a id="adealLinkUrl" href="#" target="_blank" rel="noopener" class="btn-go-book adeal-btn">احجز الآن</a>
+                    <a id="adealWA" href="#" target="_blank" rel="noopener" class="btn-whatsapp">🟢 واتساب</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-card" id="nasCard">
+            <div class="card-flex">
+                <div class="provider-info">
+                    <span class="best-tag" id="nasBestTag" style="display:none;">الأرخص تقديرياً</span>
+                    <strong>طيران ناس (Flynas)</strong>
+                    <span id="nasDetails">أفضل عروض الطيران الاقتصادي ممررة لصفحة الدفع</span>
+                    <div class="price-badge" id="nasPrice">السعر: جاري الحساب...</div>
+                    <div class="price-note">سعر تقديري بحسب المسار والدرجة، السعر النهائي الفعلي يظهر عند الحجز</div>
+                </div>
+                <div class="actions-flex">
+                    <a id="nasLinkUrl" href="#" target="_blank" rel="noopener" class="btn-go-book nas-btn">احجز الآن</a>
+                    <a id="nasWA" href="#" target="_blank" rel="noopener" class="btn-whatsapp">🟢 واتساب</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-card" id="hotelCardResult" style="display: none;">
+            <div class="card-flex">
+                <div class="provider-info">
+                    <strong id="chosenHotelTitle">اسم الفندق المحدد</strong>
+                    <span>أفضل الأسعار المتاحة للغرف الفاخرة بناءً على تاريخ وصولك</span>
+                </div>
+                <a id="hotelLinkUrl" href="#" target="_blank" rel="noopener" class="btn-go-book hotel-btn">احجز الفندق الآن</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="google_translate_element"></div>
+<div class="lang-switch-container">
+    <button class="lang-btn" onclick="changeLanguage('ar')">العربية</button>
+    <span class="lang-divider">|</span>
+    <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+</div>
+
+<script>
+    // ================= شاشة الانترو =================
+    window.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            const introSplash = document.getElementById('intro-splash');
+            if (introSplash) {
+                introSplash.classList.add('exit-active');
+                setTimeout(function () { introSplash.remove(); }, 800);
+            }
+        }, 2500);
+    });
+
+    // ================= الساعات =================
+    function updateClocks() {
+        const timeKSA = new Date().toLocaleTimeString("ar-SA", { timeZone: "Asia/Riyadh" });
+        const timeCairo = new Date().toLocaleTimeString("ar-SA", { timeZone: "Africa/Cairo" });
+        document.getElementById("makkah").innerText = timeKSA;
+        document.getElementById("madinah").innerText = timeKSA;
+        document.getElementById("cairo").innerText = timeCairo;
+    }
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    // ================= الترجمة =================
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'ar', includedLanguages: 'ar,en', autoDisplay: false
+        }, 'google_translate_element');
+    }
+    function changeLanguage(langCode) {
+        const googleSelect = document.querySelector('#google_translate_element select');
+        if (googleSelect) {
+            googleSelect.value = langCode;
+            googleSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+    // ================= الوضع الداكن =================
+    function toggleDarkMode() {
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            themeIcon.innerText = "🌙"; themeText.innerText = "الوضع الداكن";
+        } else {
+            body.classList.add('dark-mode');
+            themeIcon.innerText = "☀️"; themeText.innerText = "الوضع المضيء";
+        }
+    }
+
+    // ================= نصائح الحجز =================
+    function triggerDynamicAdvice() {
+        const dateVal = document.getElementById('departureDate').value;
+        const banner = document.getElementById('adviceBanner');
+        if (!dateVal) return;
+        const month = parseInt(dateVal.split('-')[1]);
+        banner.style.display = 'block';
+        if (month >= 6 && month <= 8) {
+            banner.innerText = "☀️ تنبيه موسم الذروة الصيفي: الأسعار تشهد ارتفاعاً مستمراً حالياً. ننصح بشراء التذاكر فوراً لتوفر مقاعد أفضل!";
+            banner.style.color = "#b45309";
+        } else {
+            banner.innerText = "🍂 توقيت ممتاز: أنت تحجز في فترة انخفاض موسمي للطلب، الأسعار مناسبة جداً ومثالية للتوفير اليوم.";
+            banner.style.color = "#039855";
+        }
+    }
+
+    // ================= حاسبة الشنط =================
+    function calculateLuggageWeight() {
+        const p = document.getElementById('luggageProvider').value;
+        if (p === 'adeal') {
+            document.getElementById('handLuggage').innerText = "7 كيلو جرام (شنطة ظهر/مقصورة)";
+            document.getElementById('checkedLuggage').innerText = "20 كيلو جرام (متاح لدرجة صعد أو مدفوع مسبقاً)";
+        } else {
+            document.getElementById('handLuggage').innerText = "7 كيلو جرام (أبعاد 56x36x23 سم)";
+            document.getElementById('checkedLuggage').innerText = "20 أو 30 كيلو جرام (حسب باقة الحجز المختارة)";
+        }
+    }
+
+    // ================= منبه الأسعار =================
+    function activatePriceAlert() {
+        const email = document.getElementById('alertEmail').value;
+        if (!email || !email.includes('@')) {
+            alert("برجاء إدخال بريد إلكتروني صحيح.");
+            return;
+        }
+        alert(`🚀 تم تفعيل منبه الأسعار لبريدك (${email}) بنجاح! سنرسل لك إشعاراً فور هبوط الأسعار.`);
+    }
+
+    // ================= نوع الرحلة =================
+    let currentTripType = 'round';
+    function setTripType(type) {
+        currentTripType = type;
+        const tabRound = document.getElementById('tabRoundTrip');
+        const tabOneWay = document.getElementById('tabOneWay');
+        const returnGroup = document.getElementById('returnDateGroup');
+        if (type === 'round') {
+            tabRound.classList.add('active'); tabOneWay.classList.remove('active');
+            returnGroup.style.display = 'block';
+        } else {
+            tabOneWay.classList.add('active'); tabRound.classList.remove('active');
+            returnGroup.style.display = 'none';
+        }
+    }
+
+    function quickSelectDestination(code) {
+        const toSelect = document.getElementById('toCity');
+        toSelect.value = (code === 'Makkah') ? 'JED' : code;
+        toSelect.style.boxShadow = "0 0 12px #2563eb";
+        setTimeout(() => { toSelect.style.boxShadow = ""; }, 400);
+        triggerDynamicAdvice();
+    }
+
+    // ================= نموذج تسعير أكثر واقعية =================
+    // تصنيف المطارات حسب حجم الحركة الجوية إليها (يؤثر على السعر التقديري)
+    const airportTier = {
+        // مصر
+        CAI: 1.0, HBE: 1.2, SPX: 1.25, SSH: 1.15, HRG: 1.15,
+        LXR: 1.3, ASW: 1.3, ATZ: 1.4, RMF: 1.35, SOH: 1.4,
+        // السعودية
+        JED: 1.0, RUH: 1.05, DMM: 1.15, MED: 1.1, AHB: 1.3,
+        TYF: 1.3, ELQ: 1.35, HAS: 1.4, GIZ: 1.35, YNB: 1.35, ULH: 1.3
+    };
+    const egyptAirports = ['CAI','HBE','SPX','SSH','HRG','LXR','ASW','ATZ','RMF','SOH'];
+
+    const cabinMultiplier = { economy: 1, premium: 1.35, business: 2.6, first: 4.2 };
+    const cabinLabel = { economy: 'الاقتصادية', premium: 'الاقتصادية المميزة', business: 'رجال الأعمال', first: 'الأولى' };
+
+    // دالة عشوائية ثابتة (deterministic) مبنية على نص - نفس المدخلات تُنتج نفس الرقم دائماً
+    function seededRandom(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) {
+            h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+        }
+        const x = Math.sin(h) * 10000;
+        return x - Math.floor(x);
+    }
+
+    // نافذة تحديث كل 4 ساعات: كل الأسعار تبقى ثابتة داخل نفس الفترة ثم تتغير قليلاً بعدها
+    function get4HourBucket() {
+        return Math.floor(Date.now() / (4 * 60 * 60 * 1000));
+    }
+
+    function calculateRealisticPrice(from, to, provider, cabin) {
+        if (!airportTier[from] || !airportTier[to]) return null;
+
+        const fromIsEgypt = egyptAirports.includes(from);
+        const toIsEgypt = egyptAirports.includes(to);
+
+        // سعر أساس حسب نوع المسار (بالريال السعودي، اقتصادية، ذهاب فقط)
+        let base;
+        if (fromIsEgypt !== toIsEgypt) {
+            base = 620; // مصر <-> السعودية: خط رئيسي
+        } else if (!fromIsEgypt && !toIsEgypt) {
+            base = 340; // داخلي في السعودية
+        } else {
+            base = 380; // داخلي في مصر
+        }
+
+        base *= airportTier[from] * airportTier[to];
+        base *= cabinMultiplier[cabin] || 1;
+
+        // فروقات بسيطة بين الناقلين
+        base *= (provider === 'adeal') ? 0.95 : 1.02;
+
+        // تغيّر تقديري كل 4 ساعات (±12%) بدل رقم عشوائي في كل ضغطة بحث
+        const bucketKey = `${from}-${to}-${provider}-${cabin}-${get4HourBucket()}`;
+        const variance = 0.88 + (seededRandom(bucketKey) * 0.24); // بين 0.88 و 1.12
+        base *= variance;
+
+        return Math.round(base / 5) * 5; // تقريب لأقرب 5 ريال
+    }
+
+    function updatePriceCycleLabel() {
+        const bucketStart = get4HourBucket() * 4 * 60 * 60 * 1000;
+        const label = new Date(bucketStart).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('priceUpdateTime').innerText = label;
+    }
+    updatePriceCycleLabel();
+    setInterval(updatePriceCycleLabel, 60 * 1000);
+
+    // ================= تنفيذ البحث =================
+    function executeQarenMegaSearch() {
+        const from = document.getElementById('fromCity').value;
+        const to = document.getElementById('toCity').value;
+        const depDate = document.getElementById('departureDate').value;
+        const cabin = document.getElementById('cabinClass').value;
+        const adults = document.getElementById('passengersAdult').value;
+        const children = document.getElementById('passengersChild').value;
+        const infants = document.getElementById('passengersInfant').value;
+        const totalPax = parseInt(adults) + parseInt(children);
+        const hotelVal = document.getElementById('hotelSelect').value;
+        const hotelText = document.getElementById('hotelSelect').options[document.getElementById('hotelSelect').selectedIndex].text;
+
+        if (!depDate) {
+            alert("من فضلك اختر تاريخ المغادرة أولاً.");
+            return;
+        }
+        if (from === to) {
+            alert("لا يمكن أن تكون مدينة المغادرة هي نفسها وجهة الوصول. يرجى ضبط المطارات.");
+            return;
+        }
+
+        const adealDeepLink = `https://www.flyadeal.com/ar/booking/select?origin=${from}&destination=${to}&departureDate=${depDate}&adt=${adults}&chd=${children}&inf=${infants}&cabin=${cabin}&utm_source=qaren`;
+        const nasDeepLink = `https://www.flynas.com/ar/booking/flight-search?origin=${from}&destination=${to}&departure=${depDate}&adults=${adults}&children=${children}&infants=${infants}&cabin=${cabin}&utm_source=qaren`;
+
+        document.getElementById('adealLinkUrl').href = adealDeepLink;
+        document.getElementById('nasLinkUrl').href = nasDeepLink;
+
+        document.getElementById('adealDetails').innerText = `${from} ← ${to} · الدرجة ${cabinLabel[cabin]} · ${totalPax} مسافر(ين)`;
+        document.getElementById('nasDetails').innerText = `${from} ← ${to} · الدرجة ${cabinLabel[cabin]} · ${totalPax} مسافر(ين)`;
+
+        const priceAdeal = calculateRealisticPrice(from, to, 'adeal', cabin);
+        const priceNas = calculateRealisticPrice(from, to, 'nas', cabin);
+
+        if (priceAdeal === null || priceNas === null) {
+            alert("عذراً، هذا المسار غير مدعوم حالياً.");
+            return;
+        }
+
+        const totalAdeal = priceAdeal * totalPax;
+        const totalNas = priceNas * totalPax;
+
+        document.getElementById('adealPrice').innerText = `السعر التقريبي الكلي: ${totalAdeal.toLocaleString('ar-EG')} ريال سعودي`;
+        document.getElementById('nasPrice').innerText = `السعر التقريبي الكلي: ${totalNas.toLocaleString('ar-EG')} ريال سعودي`;
+
+        document.getElementById('adealBestTag').style.display = (totalAdeal <= totalNas) ? 'inline-block' : 'none';
+        document.getElementById('nasBestTag').style.display = (totalNas < totalAdeal) ? 'inline-block' : 'none';
+        document.getElementById('adealCard').classList.toggle('best-price', totalAdeal <= totalNas);
+        document.getElementById('nasCard').classList.toggle('best-price', totalNas < totalAdeal);
+
+        const msgAdeal = encodeURIComponent(`لقيت عرض رحلة على موقع "قارن | Qaren" على طيران أديل من مطار ${from} إلى ${to} لعدد ${totalPax} ركاب بسعر تقريبي ${totalAdeal} ريال!`);
+        const msgNas = encodeURIComponent(`لقيت عرض على طيران ناس بموقع "قارن | Qaren" من مطار ${from} إلى ${to} بسعر إجمالي تقريبي ${totalNas} ريال سعودي.`);
+        document.getElementById('adealWA').href = `https://api.whatsapp.com/send?text=${msgAdeal}`;
+        document.getElementById('nasWA').href = `https://api.whatsapp.com/send?text=${msgNas}`;
+
+        const guideBlock = document.getElementById('localGuideBlock');
+        guideBlock.style.display = 'block';
+        const guides = {
+            JED: "عند وصولك لجدة، لا تفوت زيارة كورنيش جدة والنافورة الشهيرة وتجربة البيك القريب من المطار، أو زيارة جدة التاريخية (البلد).",
+            RUH: "في الرياض، ننصح بزيارة برج المملكة وبوليفارد سيتي، وتذوق الكبسة السعودية في المطاعم التراثية بالمنطقة.",
+            MED: "في المدينة المنورة، ننصح بزيارة المسجد النبوي وجبل أحد، وتذوق التمر المدني الأصلي من أسواق المدينة.",
+            CAI: "أهلاً بك في القاهرة! معالمك الأساسية هي أهرامات الجيزة ومتحف الحضارة. الأكلة المفضلة هنا هي الكشري المصري، أو الفول والفلافل.",
+            HRG: "في الغردقة، لا تفوت الغوص والسنوركل في الشعاب المرجانية، وتجربة المأكولات البحرية الطازجة على الكورنيش.",
+            SSH: "في شرم الشيخ، جزيرة تيران ومحمية رأس محمد من أبرز الوجهات، مع مأكولات بحرية طازجة على شاطئ نعمة باي."
+        };
+        document.getElementById('guideText').innerText = guides[to] || "وجهة ممتازة! ننصحك بالتحقق من وسائل المواصلات المعتمدة فور خروجك من صالة المطار.";
+
+        const hotelCard = document.getElementById('hotelCardResult');
+        if (hotelVal !== "none") {
+            document.getElementById('chosenHotelTitle').innerText = hotelText;
+            document.getElementById('hotelLinkUrl').href = `https://www.google.com/travel/search?q=${encodeURIComponent(hotelText)}`;
+            hotelCard.style.display = 'flex';
+        } else {
+            hotelCard.style.display = 'none';
+        }
+
+        document.getElementById('qarenResultsBlock').style.display = 'block';
+        document.getElementById('qarenResultsBlock').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        if (mm < 10) mm = '0' + mm;
+        if (dd < 10) dd = '0' + dd;
+        const systemToday = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('departureDate').value = systemToday;
+        document.getElementById('departureDate').min = systemToday;
+        document.getElementById('returnDate').value = systemToday;
+        document.getElementById('returnDate').min = systemToday;
+        triggerDynamicAdvice();
+    });
+</script>
+</body>
+</html>
